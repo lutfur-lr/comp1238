@@ -1,5 +1,9 @@
 # Number row characters
 
+- [ CLI Commands ] ( docs/cli.md )
+
+
+
 - ! (Exclamation mark)
 - @ (At)
 - $ (Dollar sign)
@@ -24,4 +28,4 @@
 -  :sweat:
 
 
-- [ CLI Commands ] ( docs/cli.md )
+
