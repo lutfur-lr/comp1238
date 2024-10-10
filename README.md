@@ -24,4 +24,4 @@
 -  :sweat:
 
 
-- [ CLI Commands ] ( docs/cli.md)
+- [ CLI Commands ] ( docs/cli.md )
