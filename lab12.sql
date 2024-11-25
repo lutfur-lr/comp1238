@@ -1,33 +1,60 @@
--- TABLE
-CREATE TABLE assignments (  
-    id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Unique ID for each assignment  
-    course_id TEXT NOT NULL,  -- Foreign key referencing courses  
-    title TEXT NOT NULL,
-    status TEXT NOT NULL,  -- Status of the assignment (e.g., "Not Started", "In Progress", "Completed") 
-    due_date TEXT,  -- Due date stored as a string (e.g., "YYYY-MM-DD")  
-    FOREIGN KEY (course_id) REFERENCES courses(course_id) ON DELETE CASCADE  
-);
-CREATE TABLE courses (  
-    course_id TEXT PRIMARY KEY,  -- String ID for courses, e.g., "COMP1234"  
-    semester TEXT NOT NULL,  -- Semester the course is offered (e.g., "2024-3" for Fall 2024)
-    course_name TEXT NOT NULL,
-    lab_time TEXT,  -- Time of the lab session (e.g., "Tue 10")
-    lecture_time TEXT,  -- Time of the lecture session (e.g., "Mon 13")
-    notes TEXT  
-);
-CREATE TABLE rectangles (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    -- top left corner coordinates
-    x REAL NOT NULL,
-    y REAL NOT NULL,
-    width REAL NOT NULL,
-    height REAL NOT NULL,
-    color TEXT -- css style color
-);
+-- 1. Concatenate Course Name and Semester:
+SELECT course_name || ' - ' || semester 
+FROM courses;
+
+
+-- 2. Find Courses with Labs on Fridays:
+
+SELECT course_id, course_name, lab_time
+FROM courses
+WHERE lab_time LIKE '%Friday%';
+
+--3. Upcoming Assignments:
+
+SELECT *
+FROM assignments
+WHERE due_date > date('now');
+
+--4.Count Assignments by Status:
+
+SELECT status, COUNT(*) AS total_assignments
+FROM assignments
+GROUP BY status;
  
--- INDEX
+ --5.Longest Course Name:
+
+SELECT course_name
+FROM courses
+ORDER BY length(course_name) DESC
+LIMIT 1;
  
--- TRIGGER
- 
--- VIEW
- 
+--6.Uppercase Course Names:
+
+SELECT upper(course_name) AS course_name_upper
+FROM courses;
+
+--7.Assignments Due in September:
+
+SELECT title
+FROM assignments
+WHERE due_date LIKE '%-09-%';
+
+--8.Assignments with Missing Due Dates:
+
+SELECT *
+FROM assignments
+WHERE due_date IS NULL;
+
+--Optional Tasks:
+-- 1.Total assignments per course
+SELECT c.course_id, COUNT(a.id) AS total_assignments
+FROM courses c
+LEFT JOIN assignments a ON c.course_id = a.course_id
+GROUP BY c.course_id;
+
+
+-- 2.Courses without assignments
+SELECT c.*
+FROM courses c
+LEFT JOIN assignments a ON c.course_id = a.course_id
+WHERE a.id IS NULL;
